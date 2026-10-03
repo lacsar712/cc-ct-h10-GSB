@@ -78,8 +78,8 @@ def login(request: HttpRequest, body: LoginIn):
 
 @api.get("/submissions", response=list[SubmissionOut], auth=bearer_auth)
 def list_submissions(request: HttpRequest):
-    from desk.h10_extra_trap import skew_list
-    rows = skew_list(OffsetSubmission.objects.all()[:200])
+    # 已落盘成功的记录必须完整出现在总览列表，不得再按“整理中”口径藏行。
+    rows = OffsetSubmission.objects.all()[:200]
     return [_to_out(r) for r in rows]
 
 

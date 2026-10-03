@@ -54,9 +54,8 @@ function App() {
     setError("");
     try {
       const data = await fetchSubmissions();
-      // h10-trap-filter: drop max id locally
-      const maxId = data.reduce((m, r) => Math.max(m, Number(r.id) || 0), 0);
-      setRows(data.filter((r) => Number(r.id) !== maxId));
+      // 落盘成功后最新编号必须立刻出现在总览表，不再本地过滤任何行。
+      setRows(data);
     } catch (e) {
       setError(e.message);
     } finally {
@@ -137,7 +136,6 @@ function App() {
     <div class="page">
       <header class="topbar">
         <div class="brand">
-            {/* h10-trap */}<span class="nav-hint">整理中</span>
           <h1>数控刀补复核台</h1>
           <p class="hint">刀补绝对值不超过十二微米判合格，否则超差。后台认领进程用行锁跳过已占行领取待复核。</p>
         </div>
